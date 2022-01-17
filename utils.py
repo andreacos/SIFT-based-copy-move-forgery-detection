@@ -2,10 +2,6 @@
 """
     File name: utils.py
     Author: Andrea Costanzo;
-            Quoc-Tin Phan (quoctin.phan[at]unitn.it) - startng from addpath(), approx line no. 206
-    Date created: 14/01/2019
-    Date last modified: 15/02/2019
-    Python Version: 3.7
 """
 
 import os
@@ -39,7 +35,7 @@ def plot_matches(in_img, kpts_set1, kpts_set2):
     plt.axis('off')
 
     extent = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
-    plt.savefig('CMFD_matches.png', bbox_inches=extent, transparent=True, pad_inches=0, dpi=230)
+    plt.savefig('DETECTION_fiori_gialli.png', bbox_inches=extent, transparent=True, pad_inches=0, dpi=230)
     plt.close('all')
 
     return
@@ -202,126 +198,3 @@ def fast_zncc(original_im, warped_im, corr_window=7, max_subimage_width=400):
         zncc_map[zncc_map < 0] = 0
 
     return zncc_map
-
-
-def add_path(path):
-    if path not in sys.path:
-        sys.path.insert(0, path)
-
-
-def laplacian(W):
-
-    """Computes the symetric normalized laplacian.
-    L = D^{-1/2} W D{-1/2}
-    """
-    D = np.zeros(W.shape)
-    I = np.eye(W.shape[0])
-    w = np.sum(W, axis=0)
-    D.flat[::len(w) + 1] = w ** (-0.5)  # set the diag of D to w
-    return I - D.dot(W).dot(D)
-
-
-def spectral_clustering(S):
-    L = laplacian(S)
-    eig_values, eig_vecs = np.linalg.eig(L)
-    idx = eig_values.argsort()[::-1]
-    eig_values = eig_values[idx]
-    eig_vecs = eig_vecs[:,idx]
-    n = S.shape[0]
-    # use eigengap to estimate number of clusters
-    k = n - 1 - np.argmax(np.abs(eig_values[:-2] - np.abs(eig_values[1:-1])))
-    features = eig_vecs[:,n-k:]
-    features,_ = norm_normalize(features)
-    kmeans = KMeans(n_clusters=k, random_state=0).fit(features)
-    return k,kmeans.labels_
-
-
-def norm_normalize(X):
-    '''
-    X : x_samples x n_features
-    '''
-    norm = np.linalg.norm(X, axis=1, keepdims=True)
-    return X / norm, norm
-
-
-def std_normalize(X):
-    '''
-    X : x_samples x n_features
-    '''
-    std = X.std(axis=0, keepdims=True)
-    return X / std, std
-
-
-def mean_normalize(X):
-    '''
-    X: x_samples x n_features
-    '''
-    mean = X.mean(axis=0, keepdims=True)
-    return X - mean, mean
-
-
-def mean_std_normalize(X):
-    '''
-    X: x_samples x n_features
-    '''
-    mean = X.mean(axis=0, keepdims=True)
-    std = X.std(axis=0, keepdims=True)
-    return (X - mean)/std, mean, std
-
-
-def is_pos_def(X):
-    return np.all(np.linalg.eigvals(X) > 0)
-
-
-def transform(coords, trans):
-    '''
-    coords: n_points x (2 or 3)
-    T: 3 x 3
-    '''
-    if coords.shape[1]==2:
-        coords_,mu = mean_normalize(coords)
-    else:
-        coords_,mu = mean_normalize(coords[:2,:])
-    coords_h = np.column_stack((coords_,np.ones(coords_.shape[0])))
-    coords_h_t = trans.dot(coords_h.T)
-    return coords_h_t[:2,:].T + mu
-
-
-def bb_mean(coords):
-    '''
-    coords: n_points x 2
-    '''
-    min_x,max_x = (coords[:,0].min(),coords[:,0].max())
-    min_y,max_y = (coords[:,1].min(),coords[:,1].max())
-    return (max_x + min_x)/2,(max_y + min_y)/2
-
-
-def path_match(files, basename):
-    '''
-    We don't know the ext of image, so we have to find it by basename
-    '''
-    for f in files:
-        b = os.path.basename(f)
-        ext = b[b.find('.'):]
-        if b.replace(ext,'') == basename:
-            return f
-    return None
-
-
-def compute_affinity(X):
-    N = X.shape[0]
-    ans = np.zeros((N, N))
-    for i in range(N):
-        for j in range(N):
-            ans[i][j] = squared_exponential(X[i], X[j])
-    return ans
-
-
-def squared_exponential(x, y, sig=0.8, sig2=1):
-    norm = np.linalg.norm(x - y)
-    dist = norm * norm
-    return np.exp(- dist / (2 * sig * sig2))
-
-
-def is_rigid(T):
-    return np.sum(np.abs(T[:2,:2]) - np.eye(2)) < 1e-6

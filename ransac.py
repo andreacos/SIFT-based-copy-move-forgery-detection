@@ -1,10 +1,7 @@
 
 """
     File name: ransac.py
-    Author: Andrea Costanzo Piccinnano
-    Date created: 14/01/2019
-    Date last modified: 15/01/2019
-    Python Version: 3.7
+    Author: Andrea Costanzo
 """
 
 import numpy as np

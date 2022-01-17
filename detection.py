@@ -2,8 +2,6 @@
 """
     File name: detection.py
     Author: Andrea Costanzo
-    Date last modified: 17/01/2022
-    Python Version: 3.8
 """
 
 import cv2

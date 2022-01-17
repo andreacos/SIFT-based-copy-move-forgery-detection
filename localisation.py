@@ -2,8 +2,6 @@
 """
     File name: localisation.py
     Author: Andrea Costanzo
-    Date last modified: 17/01/2022
-    Python Version: 3.7
 """
 
 import cv2
