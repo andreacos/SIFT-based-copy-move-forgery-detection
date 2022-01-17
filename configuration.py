@@ -2,9 +2,6 @@
 """
     File name: configuration.py
     Author: Andrea Costanzo
-    Date created: 14/01/2019
-    Date last modified: 15/01/2019
-    Python Version: 3.7
 """
 
 
