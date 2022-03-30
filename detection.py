@@ -26,13 +26,13 @@ def copy_move_detector(img):
 
     # Extract SIFT keypoints
     sift = cv2.SIFT_create(contrastThreshold=Config().Sift.contrastThreshold,
-                                       edgeThreshold=Config().Sift.edgeThreshold,
-                                       nfeatures=Config().Sift.nFeatures,
-                                       nOctaveLayers=Config().Sift.nOctaveLayers,
-                                       sigma=Config().Sift.sigma)
+                           edgeThreshold=Config().Sift.edgeThreshold,
+                           nfeatures=Config().Sift.nFeatures,
+                           nOctaveLayers=Config().Sift.nOctaveLayers,
+                           sigma=Config().Sift.sigma)
 
     (kps, descr) = sift.detectAndCompute(gray, None)
-    print('Found {} key points'.format(len(kps)))
+    # print('Found {} key points'.format(len(kps)))
 
     descr = np.asarray(descr)
     z = np.dot(descr, descr.transpose())
@@ -72,7 +72,7 @@ def copy_move_detector(img):
                 p1.append(kp_current)
                 p2.append(kb_best_match)
 
-    print('Found {} matches'.format(len(p1)))
+    # print('Found {} matches'.format(len(p1)))
 
     # Save input image with overlaid matches as PNG
     if Config().Cmfd.Detector.saveImages:

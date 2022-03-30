@@ -27,14 +27,14 @@ class Detector:
 class Localizer:
     hacMetric = 'ward'                              # Metric for Hierarchical Agglomerate Clustering (HAC)
     hacMinClusters = 3                              # Minimum number of clusters for HAC
-    hacMaxDepth = 4                                 # Depth for HAC
+    hacMaxDepth = 4                                # Depth for HAC
     minClustersForLocalization = 1                  # Minimum number of clusters for copy-move localization
-    minPointsPerCluster = 10                        # Minimum number of points in clusters for copy-move localization
+    minPointsPerCluster = 5                         # Minimum number of points in clusters for copy-move localization
     minBlobAreaAsPercentOfImgSize = 0.01            # Minimum area (as % of total image size) for a detected region
     znccMinBinaryThreshold = 0.28                   # Binarisation threshold for ZNCC algorithm
     znccKernelSize = 7                              # Size of the sliding window used to compute ZNNC score
-    znccMaxSubimageWidth = 500                      # Width of the sub-images into with input image is split for ZNCC
-    saveImages = True                              # Save intermediate and final results as images
+    znccMaxSubimageWidth = 150                      # Width of the sub-images into with input image is split for ZNCC
+    saveImages = True                               # Save intermediate and final results as images
 
 
 # General wrapper for all Copy-Move detection parameters

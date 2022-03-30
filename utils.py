@@ -15,6 +15,12 @@ from scipy.cluster.hierarchy import linkage, cophenet, fcluster
 from sklearn.cluster import KMeans
 
 
+def read_image(file):
+    img = cv2.imread(file, -1)
+    if img.shape[-1] == 4 and len(img.shape) == 3:
+        img = img[:, :, :3]
+    return img
+
 def hierarchical_agglomerate_clustering(vec1, vec2, metric='ward', clus_thr=3, depth=4):
 
     p = np.flip(np.vstack((np.asarray(vec1), np.asarray(vec2))), 1)
